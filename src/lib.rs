@@ -1,7 +1,11 @@
 mod utils;
+pub mod vector;
+mod scene;
 
 use wasm_bindgen::prelude::*;
 use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement, ImageData};
+
+use scene::get_pixel;
 
 #[wasm_bindgen]
 pub fn render(canvas: HtmlCanvasElement) -> Result<(), JsValue> {
@@ -18,19 +22,12 @@ pub fn render(canvas: HtmlCanvasElement) -> Result<(), JsValue> {
 
     for y in 0..height {
         for x in 0..width {
+            let (r, g, b) = get_pixel(x, y, width, height);
             let offset = (y * width + x) * 4;
-
-            // --- replace this with your ray-tracing logic ---
-            let r = ((x as f64 / width as f64) * 255.0) as u8;
-            let g = ((y as f64 / height as f64) * 255.0) as u8;
-            let b = 128u8;
-            let a = 255u8;
-            // ------------------------------------------------
-
             pixels[offset] = r;
             pixels[offset + 1] = g;
             pixels[offset + 2] = b;
-            pixels[offset + 3] = a;
+            pixels[offset + 3] = 255;
         }
     }
 
