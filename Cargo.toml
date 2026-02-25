@@ -4,6 +4,9 @@ version = "0.0.1"
 authors = ["Alex Romberg"]
 edition = "2021"
 publish = false
+license = "proprietary"
+description = "A raytracer written in Rust and compiled to WebAssembly for use in a web browser as part of the Raytracing from scratch module."
+repository = "https://github.com/AlexRomberg/raytracer"
 
 [lib]
 crate-type = ["cdylib", "rlib"]

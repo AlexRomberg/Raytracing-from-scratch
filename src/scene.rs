@@ -34,7 +34,7 @@ pub fn circles() -> Vec<Circle> {
     ]
 }
 
-pub fn get_pixel(x: usize, y: usize, width: usize, height: usize) -> (u8, u8, u8) {
+pub fn get_pixel(x: u32, y: u32, _width: u32, _height: u32) -> (u8, u8, u8) {
     let point = {
         let x = x as i32;
         let y = y as i32;
@@ -43,12 +43,9 @@ pub fn get_pixel(x: usize, y: usize, width: usize, height: usize) -> (u8, u8, u8
 
     for circle in &circles() {
         if point.distance2(&circle.center) <= circle.radius * circle.radius {
-            return (0x00, 0x7a, 0xff);
+            return (0x00u8, 0x7au8, 0xffu8);
         }
     }
 
-    let r = 0u8;
-    let g = 0u8;
-    let b = 0u8;
-    (r, g, b)
+    (0x00u8, 0x00u8, 0x00u8)
 }
