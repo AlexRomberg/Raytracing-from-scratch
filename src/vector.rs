@@ -2,20 +2,20 @@ use std::ops::{Add, Mul, Neg, Sub};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vec2 {
-    pub x: i32,
-    pub y: i32,
+    pub x: f32,
+    pub y: f32,
 }
 
 impl Vec2 {
-    pub fn new(x: i32, y: i32) -> Self {
+    pub fn new(x: f32, y: f32) -> Self {
         Self { x, y }
     }
 
-    pub fn length(&self) -> i32 {
-        (self.x * self.x + self.y * self.y).isqrt()
+    fn length(&self) -> f32 {
+        self.length2().sqrt()
     }
 
-    pub fn length2(&self) -> i32 {
+    fn length2(&self) -> f32 {
         self.x * self.x + self.y * self.y
     }
 
@@ -27,14 +27,14 @@ impl Vec2 {
         }
     }
 
-    pub fn dot(&self, other: &Self) -> i32 {
+    pub fn dot(&self, other: &Self) -> f32 {
         self.x * other.x + self.y * other.y
     }
 
-    pub fn distance(&self, other: &Self) -> i32 {
+    pub fn distance(&self, other: &Self) -> f32 {
         (*self - *other).length()
     }
-    pub fn distance2(&self, other: &Self) -> i32 {
+    pub fn distance2(&self, other: &Self) -> f32 {
         (*self - *other).length2()
     }
 }
@@ -59,9 +59,9 @@ impl Sub for Vec2 {
     }
 }
 
-impl Mul<i32> for Vec2 {
+impl Mul<f32> for Vec2 {
     type Output = Self;
-    fn mul(self, rhs: i32) -> Self {
+    fn mul(self, rhs: f32) -> Self {
         Self {
             x: self.x * rhs,
             y: self.y * rhs,

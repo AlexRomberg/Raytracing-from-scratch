@@ -1,51 +1,35 @@
+use crate::circle::Circle;
+use crate::color::Color;
 use crate::vector::Vec2;
-
-pub struct Circle {
-    pub center: Vec2,
-    pub radius: i32,
-}
 
 pub fn circles() -> Vec<Circle> {
     vec![
         Circle {
-            center: Vec2::new(200, 200),
-            radius: 80,
+            center: Vec2::new(600.0, 300.0),
+            radius: 150.0,
+            color: Color::new(1.0, 0.0, 0.0),
         },
         Circle {
-            center: Vec2::new(400, 300),
-            radius: 120,
+            center: Vec2::new(500.0, 500.0),
+            radius: 150.0,
+            color: Color::new(0.0, 1.0, 0.0),
         },
         Circle {
-            center: Vec2::new(600, 250),
-            radius: 60,
-        },
-        Circle {
-            center: Vec2::new(600, 600),
-            radius: 30,
-        },
-        Circle {
-            center: Vec2::new(1200, 90),
-            radius: 60,
-        },
-        Circle {
-            center: Vec2::new(1300, 800),
-            radius: 60,
+            center: Vec2::new(700.0, 500.0),
+            radius: 150.0,
+            color: Color::new(0.0, 0.0, 1.0),
         },
     ]
 }
 
-pub fn get_pixel(x: u32, y: u32, _width: u32, _height: u32) -> (u8, u8, u8) {
-    let point = {
-        let x = x as i32;
-        let y = y as i32;
-        Vec2 { x, y }
-    };
+pub fn get_pixel(point: Vec2) -> Color {
+    let mut color = Color::new(1.0, 1.0, 1.0);
 
     for circle in &circles() {
-        if point.distance2(&circle.center) <= circle.radius * circle.radius {
-            return (0x00u8, 0x7au8, 0xffu8);
+        if circle.contains(point) {
+            color = color + circle.color;
         }
     }
 
-    (0x00u8, 0x00u8, 0x00u8)
+    color
 }

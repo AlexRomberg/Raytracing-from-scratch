@@ -1,3 +1,5 @@
+pub mod circle;
+pub mod color;
 mod scene;
 mod utils;
 pub mod vector;
@@ -6,6 +8,8 @@ use wasm_bindgen::prelude::*;
 use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement, ImageData};
 
 use scene::get_pixel;
+
+use crate::vector::Vec2;
 
 #[wasm_bindgen]
 pub fn render(canvas: HtmlCanvasElement) -> Result<(), JsValue> {
@@ -22,11 +26,16 @@ pub fn render(canvas: HtmlCanvasElement) -> Result<(), JsValue> {
 
     for y in 0..height {
         for x in 0..width {
-            let (r, g, b) = get_pixel(x, y, width, height);
+            let point = {
+                let x = x as f32;
+                let y = y as f32;
+                Vec2::new(x, y)
+            };
+            let color = get_pixel(point);
             let offset = ((y * width + x) * 4) as usize;
-            pixels[offset] = r;
-            pixels[offset + 1] = g;
-            pixels[offset + 2] = b;
+            pixels[offset] = (color.r * 255.0) as u8;
+            pixels[offset + 1] = (color.g * 255.0) as u8;
+            pixels[offset + 2] = (color.b * 255.0) as u8;
             pixels[offset + 3] = alpha;
         }
     }
