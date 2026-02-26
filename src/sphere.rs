@@ -1,14 +1,14 @@
-use crate::{color::Color, vector::Vec2};
+use crate::{color::Color, vector::Vec3};
 
 #[derive(Debug, Clone, Copy)]
-pub struct Circle {
-    pub center: Vec2,
+pub struct Sphere {
+    pub center: Vec3,
     pub radius: f32,
     pub color: Color,
 }
 
-impl Circle {
-    pub fn new(center: Vec2, radius: f32, color: Color) -> Self {
+impl Sphere {
+    pub fn new(center: Vec3, radius: f32, color: Color) -> Self {
         Self {
             center,
             radius,
@@ -16,7 +16,7 @@ impl Circle {
         }
     }
 
-    pub fn contains(&self, point: Vec2) -> bool {
+    pub fn contains(&self, point: &Vec3) -> bool {
         point.distance2(&self.center) <= self.radius * self.radius
     }
 }
