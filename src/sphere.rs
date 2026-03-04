@@ -1,4 +1,7 @@
-use crate::{color::Color, vector::Vec3};
+use crate::{
+    color::Color,
+    util::{ray::Ray, vector::Vec3},
+};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Sphere {
@@ -8,15 +11,16 @@ pub struct Sphere {
 }
 
 impl Sphere {
-    pub fn new(center: Vec3, radius: f32, color: Color) -> Self {
-        Self {
-            center,
-            radius,
-            color,
+    pub fn get_lambda(&self, ray: &Ray) -> Option<f32> {
+        let v = ray.origin - self.center;
+        let u = ray.direction;
+        let a = u.dot(&u);
+        let b = 2.0 * v.dot(&u);
+        let c = v.dot(&v) - self.radius * self.radius;
+        let root_content = b * b - 4.0 * a * c;
+        if root_content < 0.0 {
+            return None;
         }
-    }
-
-    pub fn contains(&self, point: &Vec3) -> bool {
-        point.distance2(&self.center) <= self.radius * self.radius
+        Some((-b - (root_content).sqrt()) / (2.0 * a))
     }
 }

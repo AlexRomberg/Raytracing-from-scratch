@@ -1,15 +1,14 @@
-pub mod color;
-pub mod ray;
+mod color;
 mod scene;
-pub mod sphere;
-pub mod vector;
+mod sphere;
+mod util;
 
 use wasm_bindgen::prelude::*;
 use web_sys::{CanvasRenderingContext2d, HtmlCanvasElement, ImageData};
 
 use scene::get_pixel;
 
-use crate::vector::Vec3;
+use crate::util::vector::Vec3;
 
 #[wasm_bindgen]
 pub fn render(canvas: HtmlCanvasElement) -> Result<(), JsValue> {

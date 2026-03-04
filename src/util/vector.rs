@@ -36,6 +36,7 @@ impl Vec3 {
     pub fn distance(&self, other: &Self) -> f32 {
         (*self - *other).length()
     }
+
     pub fn distance2(&self, other: &Self) -> f32 {
         (*self - *other).length2()
     }
