@@ -52,7 +52,7 @@ pub fn get_pixel(point: &Vec3) -> Color {
         if let Some(l) = sphere.get_lambda(&ray) {
             if l < lambda {
                 lambda = l;
-                color = sphere.color;
+                color = sphere.color * (1.0 - (lambda / 500.0));
             }
         }
     }

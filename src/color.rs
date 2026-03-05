@@ -24,6 +24,17 @@ impl Mul<Color> for Color {
     }
 }
 
+impl Mul<f32> for Color {
+    type Output = Self;
+    fn mul(self, rhs: f32) -> Self {
+        Self {
+            r: self.r * rhs,
+            g: self.g * rhs,
+            b: self.b * rhs,
+        }
+    }
+}
+
 impl Add<Color> for Color {
     type Output = Self;
     fn add(self, rhs: Self) -> Self {
