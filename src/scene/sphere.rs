@@ -1,4 +1,4 @@
-use crate::util::{color::Color, ray::Ray, vector::Vec3};
+use crate::util::{color::Color, hit::Hit, ray::Ray, vector::Vec3};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Sphere {
@@ -8,7 +8,7 @@ pub struct Sphere {
 }
 
 impl Sphere {
-    pub fn get_lambda(&self, ray: &Ray) -> Option<f32> {
+    pub fn get_hit(&self, ray: &Ray) -> Option<Hit> {
         let v = ray.origin - self.center;
         let u = ray.direction;
         let a = u.dot(&u);
@@ -18,6 +18,10 @@ impl Sphere {
         if root_content < 0.0 {
             return None;
         }
-        Some((-b - (root_content).sqrt()) / (2.0 * a))
+
+        let lambda = (-b - (root_content).sqrt()) / (2.0 * a);
+        let point = ray.origin + ray.direction * lambda;
+        let normal = (point - self.center).normalized();
+        Some(Hit::new(point, normal, lambda, self.color))
     }
 }
