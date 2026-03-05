@@ -1,11 +1,9 @@
-mod color;
 mod scene;
-mod sphere;
 mod util;
 
 use wasm_bindgen::prelude::*;
 
-use scene::get_pixel;
+use scene::scene::get_pixel;
 
 use crate::util::vector::Vec3;
 

@@ -1,7 +1,4 @@
-use crate::{
-    color::Color,
-    util::{ray::Ray, vector::Vec3},
-};
+use crate::util::{color::Color, ray::Ray, vector::Vec3};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Sphere {
