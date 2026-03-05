@@ -1,0 +1,5 @@
+/* Ensure number inputs don't have spinners cluttering the compact layout */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  opacity: 1;
+}

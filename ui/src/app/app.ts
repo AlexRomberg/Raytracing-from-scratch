@@ -1,10 +1,12 @@
-import { Component, effect, ElementRef, signal, viewChild } from '@angular/core';
+import { Component, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { Scene, SceneConfig } from './services/scene';
+import { ScenePanel } from './scene-panel/scene-panel';
 
 const ROWS_PER_CHUNK = 10;
 
 @Component({
   selector: 'app-root',
-  imports: [],
+  imports: [ScenePanel],
   templateUrl: './app.html',
   styleUrl: './app.css',
   host: {
@@ -15,6 +17,7 @@ export class App {
   private canvas = viewChild.required<ElementRef<HTMLCanvasElement>>('raytracerCanvas');
   private windowSize = signal({ width: window.innerWidth, height: window.innerHeight });
   private workers: Worker[] = [];
+  private scene = inject(Scene);
 
   constructor() {
     const numWorkers = navigator.hardwareConcurrency || 4;
@@ -30,7 +33,8 @@ export class App {
       canvas.nativeElement.width = width;
       canvas.nativeElement.height = height;
 
-      this.renderParallel(width, height, canvas.nativeElement);
+      const sceneConfig = this.scene.scene();
+      this.renderParallel(width, height, canvas.nativeElement, sceneConfig);
     });
   }
 
@@ -38,10 +42,14 @@ export class App {
     this.windowSize.set({ width: window.innerWidth, height: window.innerHeight });
   }
 
-  private renderParallel(width: number, height: number, canvas: HTMLCanvasElement) {
+  private renderParallel(width: number, height: number, canvas: HTMLCanvasElement, sceneConfig: SceneConfig) {
     const ctx = canvas.getContext('2d')!;
     const imageData = ctx.createImageData(width, height);
     const pixels = imageData.data;
+
+    const sphereData = this.scene.buildSphereData(sceneConfig.spheres);
+    const lightData = this.scene.buildLightData(sceneConfig.lights);
+    const diffuseIntensity = sceneConfig.diffuseIntensity;
 
     const chunks: { startRow: number; endRow: number }[] = [];
     for (let row = 0; row < height; row += ROWS_PER_CHUNK) {
@@ -68,7 +76,7 @@ export class App {
         }
       };
 
-      worker.postMessage({ width, startRow: chunk.startRow, endRow: chunk.endRow });
+      worker.postMessage({ width, startRow: chunk.startRow, endRow: chunk.endRow, sphereData, lightData, diffuseIntensity });
     };
 
     for (const worker of this.workers) {

@@ -1,0 +1,154 @@
+<!-- Toggle button -->
+<button
+  class="fixed top-4 right-4 z-50 bg-gray-800/80 hover:bg-gray-700 text-white px-3 py-2 rounded-lg shadow-lg backdrop-blur-sm cursor-pointer text-sm"
+  (click)="toggle()"
+>
+  {{ open() ? '✕ Close' : '⚙ Scene' }}
+</button>
+
+<!-- Panel -->
+<div
+  class="fixed top-0 right-0 h-full w-96 bg-gray-900/95 text-white backdrop-blur-md shadow-2xl z-40 overflow-y-auto transition-transform duration-300"
+  [class.translate-x-full]="!open()"
+  [class.translate-x-0]="open()"
+>
+  <div class="p-4 pt-14 space-y-6">
+    <h2 class="text-lg font-bold">Scene Settings</h2>
+
+    <!-- Diffuse Intensity -->
+    <div>
+      <label class="block text-sm text-gray-400 mb-1">Ambient Brightness</label>
+      <input
+        type="range"
+        min="0"
+        max="1"
+        step="0.01"
+        class="w-full"
+        [ngModel]="diffuseIntensity()"
+        (ngModelChange)="onDiffuseChange($event)"
+      />
+      <span class="text-xs text-gray-500">{{ diffuseIntensity()}}</span>
+    </div>
+
+    <!-- Spheres -->
+    <section>
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-semibold">Spheres</h3>
+        <button class="text-xs bg-green-600 hover:bg-green-500 px-2 py-1 rounded cursor-pointer" (click)="addSphere()">+ Add</button>
+      </div>
+
+      @for (sphere of spheres(); track $index) {
+        <div class="mb-4 p-3 bg-gray-800/60 rounded-lg space-y-2">
+          <div class="flex items-center justify-between">
+            <input
+              type="text"
+              class="bg-transparent text-sm font-medium w-full outline-none border-b border-gray-600 focus:border-blue-400"
+              [ngModel]="sphere.name"
+              (ngModelChange)="onSphereChange($index, 'name', $event)"
+            />
+            <button class="text-red-400 hover:text-red-300 text-xs ml-2 cursor-pointer shrink-0" (click)="removeSphere($index)">Remove</button>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 text-xs">
+            <div>
+              <label class="text-gray-500">X</label>
+              <input type="number" class="w-full bg-gray-700 rounded px-1 py-0.5" [ngModel]="sphere.cx" (ngModelChange)="onSphereChange($index, 'cx', $event)" />
+            </div>
+            <div>
+              <label class="text-gray-500">Y</label>
+              <input type="number" class="w-full bg-gray-700 rounded px-1 py-0.5" [ngModel]="sphere.cy" (ngModelChange)="onSphereChange($index, 'cy', $event)" />
+            </div>
+            <div>
+              <label class="text-gray-500">Z</label>
+              <input type="number" class="w-full bg-gray-700 rounded px-1 py-0.5" [ngModel]="sphere.cz" (ngModelChange)="onSphereChange($index, 'cz', $event)" />
+            </div>
+          </div>
+
+          <div class="text-xs">
+            <label class="text-gray-500">Radius</label>
+            <input type="number" class="w-full bg-gray-700 rounded px-1 py-0.5" [ngModel]="sphere.radius" (ngModelChange)="onSphereChange($index, 'radius', $event)" />
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 text-xs">
+            <div>
+              <label class="text-gray-500">R</label>
+              <input type="number" step="0.05" min="0" max="1" class="w-full bg-gray-700 rounded px-1 py-0.5" [ngModel]="sphere.r" (ngModelChange)="onSphereChange($index, 'r', $event)" />
+            </div>
+            <div>
+              <label class="text-gray-500">G</label>
+              <input type="number" step="0.05" min="0" max="1" class="w-full bg-gray-700 rounded px-1 py-0.5" [ngModel]="sphere.g" (ngModelChange)="onSphereChange($index, 'g', $event)" />
+            </div>
+            <div>
+              <label class="text-gray-500">B</label>
+              <input type="number" step="0.05" min="0" max="1" class="w-full bg-gray-700 rounded px-1 py-0.5" [ngModel]="sphere.b" (ngModelChange)="onSphereChange($index, 'b', $event)" />
+            </div>
+          </div>
+
+          <!-- Color preview -->
+          <div
+            class="h-4 rounded"
+            [style.background-color]="'rgb(' + (sphere.r * 255) + ',' + (sphere.g * 255) + ',' + (sphere.b * 255) + ')'"
+          ></div>
+        </div>
+      }
+    </section>
+
+    <!-- Lights -->
+    <section>
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-semibold">Lights</h3>
+        <button class="text-xs bg-green-600 hover:bg-green-500 px-2 py-1 rounded cursor-pointer" (click)="addLight()">+ Add</button>
+      </div>
+
+      @for (light of lights(); track $index) {
+        <div class="mb-4 p-3 bg-gray-800/60 rounded-lg space-y-2">
+          <div class="flex items-center justify-between">
+            <input
+              type="text"
+              class="bg-transparent text-sm font-medium w-full outline-none border-b border-gray-600 focus:border-yellow-400"
+              [ngModel]="light.name"
+              (ngModelChange)="onLightChange($index, 'name', $event)"
+            />
+            <button class="text-red-400 hover:text-red-300 text-xs ml-2 cursor-pointer shrink-0" (click)="removeLight($index)">Remove</button>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 text-xs">
+            <div>
+              <label class="text-gray-500">X</label>
+              <input type="number" class="w-full bg-gray-700 rounded px-1 py-0.5" [ngModel]="light.x" (ngModelChange)="onLightChange($index, 'x', $event)" />
+            </div>
+            <div>
+              <label class="text-gray-500">Y</label>
+              <input type="number" class="w-full bg-gray-700 rounded px-1 py-0.5" [ngModel]="light.y" (ngModelChange)="onLightChange($index, 'y', $event)" />
+            </div>
+            <div>
+              <label class="text-gray-500">Z</label>
+              <input type="number" class="w-full bg-gray-700 rounded px-1 py-0.5" [ngModel]="light.z" (ngModelChange)="onLightChange($index, 'z', $event)" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 text-xs">
+            <div>
+              <label class="text-gray-500">R</label>
+              <input type="number" step="0.05" min="0" max="1" class="w-full bg-gray-700 rounded px-1 py-0.5" [ngModel]="light.r" (ngModelChange)="onLightChange($index, 'r', $event)" />
+            </div>
+            <div>
+              <label class="text-gray-500">G</label>
+              <input type="number" step="0.05" min="0" max="1" class="w-full bg-gray-700 rounded px-1 py-0.5" [ngModel]="light.g" (ngModelChange)="onLightChange($index, 'g', $event)" />
+            </div>
+            <div>
+              <label class="text-gray-500">B</label>
+              <input type="number" step="0.05" min="0" max="1" class="w-full bg-gray-700 rounded px-1 py-0.5" [ngModel]="light.b" (ngModelChange)="onLightChange($index, 'b', $event)" />
+            </div>
+          </div>
+
+          <!-- Color preview -->
+          <div
+            class="h-4 rounded"
+            [style.background-color]="'rgb(' + (light.r * 255) + ',' + (light.g * 255) + ',' + (light.b * 255) + ')'"
+          ></div>
+        </div>
+      }
+    </section>
+  </div>
+</div>
