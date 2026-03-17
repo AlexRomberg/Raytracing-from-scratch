@@ -22,6 +22,6 @@ impl Sphere {
         let lambda = (-b - (root_content).sqrt()) / (2.0 * a);
         let point = ray.origin + ray.direction * lambda;
         let normal = (point - self.center).normalized();
-        Some(Hit::new(point, normal, lambda, self.color))
+        Some(Hit::new(point, normal, lambda, self.color, None, None))
     }
 }
