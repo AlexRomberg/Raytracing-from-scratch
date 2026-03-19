@@ -1,6 +1,7 @@
 import { Component, effect, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { Scene, SceneConfig } from './services/scene';
 import { ScenePanel } from './scene-panel/scene-panel';
+import { SceneData } from './render.worker';
 
 const ROWS_PER_CHUNK = 10;
 
@@ -48,6 +49,7 @@ export class App {
     const pixels = imageData.data;
 
     const sphereData = this.scene.buildSphereData(sceneConfig.spheres);
+    const triangleData = this.scene.buildTriangleData(sceneConfig.triangles);
     const lightData = this.scene.buildLightData(sceneConfig.lights);
     const diffuseIntensity = sceneConfig.diffuseIntensity;
 
@@ -64,10 +66,12 @@ export class App {
       if (!chunk) return;
 
       worker.onmessage = ({ data }: MessageEvent<{ startRow: number; endRow: number; pixels: Uint8Array }>) => {
-        const offset = data.startRow * width * 4;
-        pixels.set(data.pixels, offset);
+        const startIdx = data.startRow * width * 4;
+        const endIdx = data.endRow * width * 4;
+        for (let i = 0; i < data.pixels.length; i++) {
+          pixels[startIdx + i] = data.pixels[i];
+        }
         completed++;
-
 
         if (completed === total) {
           ctx.putImageData(imageData, 0, 0);
@@ -76,7 +80,9 @@ export class App {
         }
       };
 
-      worker.postMessage({ width, startRow: chunk.startRow, endRow: chunk.endRow, sphereData, lightData, diffuseIntensity });
+      const sceneData: SceneData = { width, height, startRow: chunk.startRow, endRow: chunk.endRow, sphereData, triangleData, lightData, diffuseIntensity };
+
+      worker.postMessage(sceneData);
     };
 
     for (const worker of this.workers) {

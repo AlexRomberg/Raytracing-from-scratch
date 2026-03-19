@@ -12,7 +12,7 @@ pub fn get_pixel(
     ambient_intensity: f32,
 ) -> Color {
     let mut color = Color::new(0.0, 0.0, 0.0);
-    let ray = Ray::new(*point, Vec3::new(0.0, 0.0, 1.0));
+    let ray = Ray::new(*point, Vec3::new(0.0, 0.0, -1.0));
     let mut lambda = f32::INFINITY;
     let mut nearest_hit: Option<Hit> = None;
 

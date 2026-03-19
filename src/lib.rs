@@ -22,7 +22,7 @@ fn parse_spheres(data: &[f32]) -> Vec<Sphere> {
 }
 
 fn parse_triangles(data: &[f32]) -> Vec<Triangle> {
-    data.chunks_exact(9)
+    data.chunks_exact(12)
         .map(|c| {
             Triangle::new(
                 Vec3::new(c[0], c[1], c[2]),
@@ -40,9 +40,16 @@ fn parse_lights(data: &[f32]) -> Vec<Light> {
         .collect()
 }
 
+#[wasm_bindgen(start)]
+pub fn init() {
+    #[cfg(feature = "console_error_panic_hook")]
+    console_error_panic_hook::set_once();
+}
+
 #[wasm_bindgen]
 pub fn render_rows(
     width: u32,
+    height: u32,
     start_row: u32,
     end_row: u32,
     sphere_data: &[f32],
@@ -59,7 +66,8 @@ pub fn render_rows(
 
     for y in start_row..end_row {
         for x in 0..width {
-            let point = Vec3::new(x as f32, y as f32, 0.0);
+            let flipped_y = height as f32 - y as f32 - 1.0;
+            let point = Vec3::new(x as f32, flipped_y, 0.0);
             let color = get_pixel(&point, &spheres, &triangles, &lights, diffuse_intensity);
             pixels.push((color.r * 255.0) as u8);
             pixels.push((color.g * 255.0) as u8);

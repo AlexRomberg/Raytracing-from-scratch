@@ -29,16 +29,15 @@ impl Triangle {
     }
 
     pub fn get_hit(&self, ray: &Ray) -> Option<Hit> {
-        let a = Matrix3x3::fromVectors([ray.direction, -self.v, -self.w]);
+        let a = Matrix3x3::from_vectors([ray.direction, -self.v, -self.w]);
         let b = self.point_a - ray.origin;
 
-        let hit_offsets = a * b;
-        if !(hit_offsets.x >= 0.0
-            && hit_offsets.y >= 0.0
-            && hit_offsets.y <= 1.0
-            && hit_offsets.z >= 0.0
-            && hit_offsets.z <= 1.0)
-        {
+        let hit_offsets = a.inverse() * b;
+        let lambda = hit_offsets.x;
+        let mu = hit_offsets.y;
+        let tao = hit_offsets.z;
+
+        if lambda <= 0.0 || mu < 0.0 || tao < 0.0 || mu + tao > 1.0 {
             return None;
         }
 

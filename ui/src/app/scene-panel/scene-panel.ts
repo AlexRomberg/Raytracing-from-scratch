@@ -1,10 +1,12 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Scene } from '../services/scene';
+import { Color, Scene, Vec3 } from '../services/scene';
+import { Vec3Input } from '../components/vec3-input/vec3-input';
+import { ColorInput } from '../components/color-input/color-input';
 
 @Component({
     selector: 'app-scene-panel',
-    imports: [FormsModule],
+    imports: [FormsModule, Vec3Input, ColorInput],
     templateUrl: './scene-panel.html',
     styleUrl: './scene-panel.css',
 })
@@ -15,6 +17,7 @@ export class ScenePanel {
     protected sceneConfig = this.scene.scene;
     protected spheres = computed(() => this.sceneConfig().spheres);
     protected lights = computed(() => this.sceneConfig().lights);
+    protected triangles = computed(() => this.sceneConfig().triangles);
     protected diffuseIntensity = computed(() => this.sceneConfig().diffuseIntensity);
 
     toggle() {
@@ -25,11 +28,15 @@ export class ScenePanel {
         this.scene.update({ diffuseIntensity: value });
     }
 
-    onSphereChange(index: number, field: string, value: number | string) {
+    onSphereChange(index: number, field: string, value: number | string | Color | Vec3) {
         this.scene.updateSphere(index, { [field]: value });
     }
 
-    onLightChange(index: number, field: string, value: number | string) {
+    onTriangleChange(index: number, field: string, value: number | string | Color | Vec3) {
+        this.scene.updateTriangle(index, { [field]: value });
+    }
+
+    onLightChange(index: number, field: string, value: number | string | Color | Vec3) {
         this.scene.updateLight(index, { [field]: value });
     }
 
@@ -39,6 +46,14 @@ export class ScenePanel {
 
     removeSphere(index: number) {
         this.scene.removeSphere(index);
+    }
+
+    addTriangle() {
+        this.scene.addTriangle();
+    }
+
+    removeTriangle(index: number) {
+        this.scene.removeTriangle(index);
     }
 
     addLight() {

@@ -7,7 +7,7 @@ pub struct Matrix3x3 {
 }
 
 impl Matrix3x3 {
-    pub fn fromVectors(vectors: [Vec3; 3]) -> Self {
+    pub fn from_vectors(vectors: [Vec3; 3]) -> Self {
         Self {
             matrix: [
                 vectors[0].x,
