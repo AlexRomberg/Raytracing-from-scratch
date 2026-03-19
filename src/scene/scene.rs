@@ -2,6 +2,7 @@ use crate::scene::light::Light;
 use crate::scene::sphere::Sphere;
 use crate::scene::triangle::Triangle;
 use crate::util::hit::Hit;
+use crate::util::ray;
 use crate::util::{color::Color, ray::Ray, vector::Vec3};
 
 pub fn get_pixel(
@@ -37,7 +38,38 @@ pub fn get_pixel(
     if let Some(hit) = nearest_hit {
         color = hit.color * ambient_intensity;
         for light in lights {
-            color += light.get_color(hit);
+            let to_light = light.position - hit.point;
+            let distance_to_light_2 = to_light.length2();
+            let ray_to_light = ray::Ray::new(hit.point, to_light.normalized());
+            let mut in_shadow = false;
+
+            for sphere in spheres {
+                if let Some(intersection) = sphere.get_hit(&ray_to_light) {
+                    if intersection.lambda > 0.0
+                        && intersection.lambda * intersection.lambda < distance_to_light_2
+                    {
+                        in_shadow = true;
+                        break;
+                    }
+                }
+            }
+
+            if !in_shadow {
+                for triangle in triangles {
+                    if let Some(intersection) = triangle.get_hit(&ray_to_light) {
+                        if intersection.lambda > 0.0
+                            && intersection.lambda * intersection.lambda < distance_to_light_2
+                        {
+                            in_shadow = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if !in_shadow {
+                color += light.get_color(hit);
+            }
         }
     }
 

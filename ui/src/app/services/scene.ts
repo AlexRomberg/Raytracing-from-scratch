@@ -43,14 +43,14 @@ export interface SceneConfig {
 const DEFAULT_SCENE: SceneConfig = {
   diffuseIntensity: 0.1,
   spheres: [
-    { name: 'Lime Left', center: { x: 650, y: 250, z: 1050 }, radius: 50, color: { r: 0, g: 1, b: 0 } },
+    { name: 'Ball top', center: { x: 500, y: 500, z: 500 }, radius: 50, color: { r: 0, g: 1, b: 0 } },
+    { name: 'Ball bottom', center: { x: 570, y: 200, z: 500 }, radius: 50, color: { r: 0, g: 1, b: 0 } },
   ],
   triangles: [
-    { name: 'TRI', pointA: { x: 500, y: 500, z: 500 }, pointB: { x: 600, y: 600, z: 500 }, pointC: { x: 500, y: 600, z: 500 }, color: { r: 1, g: 1, b: 1 } },
-    { name: 'TRI', pointA: { x: 500, y: 500, z: 500 }, pointB: { x: 600, y: 600, z: 500 }, pointC: { x: 600, y: 500, z: 500 }, color: { r: 1, g: 1, b: 1 } },
+    { name: 'Triangle', pointA: { x: 400, y: 400, z: 600 }, pointB: { x: 400, y: 300, z: 400 }, pointC: { x: 700, y: 300, z: 400 }, color: { r: 1, g: 1, b: 1 } },
   ],
   lights: [
-    { name: 'Main Light', center: { x: 800, y: 300, z: -400 }, color: { r: 1, g: 1, b: 1 } },
+    { name: 'Main light', center: { x: 500, y: 900, z: 500 }, color: { r: 1, g: 1, b: 1 } },
   ],
 };
 

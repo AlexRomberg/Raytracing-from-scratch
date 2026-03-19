@@ -12,11 +12,11 @@ impl Vec3 {
         Self { x, y, z }
     }
 
-    fn length(&self) -> f32 {
+    pub fn length(&self) -> f32 {
         self.length2().sqrt()
     }
 
-    fn length2(&self) -> f32 {
+    pub fn length2(&self) -> f32 {
         self.x * self.x + self.y * self.y + self.z * self.z
     }
 
@@ -39,14 +39,6 @@ impl Vec3 {
             y: self.z * other.x - self.x * other.z,
             z: self.x * other.y - self.y * other.x,
         }
-    }
-
-    pub fn distance(&self, other: &Self) -> f32 {
-        (*self - *other).length()
-    }
-
-    pub fn distance2(&self, other: &Self) -> f32 {
-        (*self - *other).length2()
     }
 }
 

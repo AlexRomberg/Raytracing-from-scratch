@@ -7,7 +7,7 @@ use scene::light::Light;
 use scene::scene::get_pixel;
 use scene::sphere::Sphere;
 
-use crate::scene::triangle::{self, Triangle};
+use crate::scene::triangle::Triangle;
 use crate::util::color::Color;
 use crate::util::vector::Vec3;
 
