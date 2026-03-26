@@ -1,19 +1,25 @@
 use crate::scene::light::Light;
 use crate::scene::sphere::Sphere;
 use crate::scene::triangle::Triangle;
+use crate::util::camera::Camera;
 use crate::util::hit::Hit;
 use crate::util::ray;
-use crate::util::{color::Color, ray::Ray, vector::Vec3};
+use crate::util::{color::Color, ray::Ray};
 
 pub fn get_pixel(
-    point: &Vec3,
+    x: f32,
+    y: f32,
+    width: f32,
+    height: f32,
     spheres: &[Sphere],
     triangles: &[Triangle],
     lights: &[Light],
+    camera: &Camera,
     ambient_intensity: f32,
 ) -> Color {
     let mut color = Color::new(0.0, 0.0, 0.0);
-    let ray = Ray::new(*point, Vec3::new(0.0, 0.0, -1.0));
+    let ray = camera.get_ray(x, y, width, height);
+
     let nearest_hit = get_hit(spheres, triangles, ray);
 
     if nearest_hit.is_none() {
@@ -24,7 +30,7 @@ pub fn get_pixel(
     color = hit.color * ambient_intensity;
     for light in lights {
         let to_light = light.position - hit.point;
-        let correction_shift = to_light.normalized() * 0.0001;
+        let correction_shift = to_light.normalized() * 0.0005;
         let distance_to_light_2 = to_light.length2();
         let ray_to_light = ray::Ray::new(hit.point + correction_shift, to_light.normalized());
         let mut in_shadow = false;

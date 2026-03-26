@@ -1,5 +1,6 @@
 use crate::util::{color::Color, hit::Hit, matrices::Matrix3x3, ray::Ray, vector::Vec3};
 
+#[allow(dead_code)]
 #[derive(Debug, Clone, Copy)]
 pub struct Triangle {
     pub point_a: Vec3,

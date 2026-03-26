@@ -8,6 +8,7 @@ use scene::scene::get_pixel;
 use scene::sphere::Sphere;
 
 use crate::scene::triangle::Triangle;
+use crate::util::camera::Camera;
 use crate::util::color::Color;
 use crate::util::vector::Vec3;
 
@@ -63,12 +64,40 @@ pub fn render_rows(
     let row_count = end_row - start_row;
     let mut pixels = Vec::with_capacity((row_count * width * 4) as usize);
     let alpha = 0xffu8;
+    let camera = Camera::new(
+        Vec3 {
+            x: 0.0,
+            y: 0.0,
+            z: 0.0,
+        },
+        Vec3 {
+            x: 0.0,
+            y: 0.0,
+            z: -1.0,
+        },
+        Vec3 {
+            x: 0.0,
+            y: 1.0,
+            z: 0.0,
+        },
+        90.0,
+        width as f32 / height as f32,
+    );
 
     for y in start_row..end_row {
         for x in 0..width {
             let flipped_y = height as f32 - y as f32 - 1.0;
-            let point = Vec3::new(x as f32, flipped_y, 0.0);
-            let color = get_pixel(&point, &spheres, &triangles, &lights, diffuse_intensity);
+            let color = get_pixel(
+                x as f32,
+                flipped_y as f32,
+                width as f32,
+                height as f32,
+                &spheres,
+                &triangles,
+                &lights,
+                &camera,
+                diffuse_intensity,
+            );
             pixels.push((color.r * 255.0) as u8);
             pixels.push((color.g * 255.0) as u8);
             pixels.push((color.b * 255.0) as u8);

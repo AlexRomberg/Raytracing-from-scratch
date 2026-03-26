@@ -3,3 +3,4 @@ pub mod hit;
 pub mod matrices;
 pub mod ray;
 pub mod vector;
+pub mod camera;
