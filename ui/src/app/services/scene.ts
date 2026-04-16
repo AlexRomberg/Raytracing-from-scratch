@@ -44,25 +44,15 @@ const POINT_FBL: Vec3 = { x: -500, y: -500, z: 0 };
 const POINT_FBR: Vec3 = { x: 500, y: -500, z: 0 };
 const POINT_FTL: Vec3 = { x: -500, y: 500, z: 0 };
 const POINT_FTR: Vec3 = { x: 500, y: 500, z: 0 };
-const POINT_BBL: Vec3 = { x: -501, y: -500, z: 1000 };
-const POINT_BBR: Vec3 = { x: 501, y: -500, z: 1000 };
-const POINT_BTL: Vec3 = { x: -501, y: 500, z: 1000 };
-const POINT_BTR: Vec3 = { x: 501, y: 500, z: 1000 };
+const POINT_BBL: Vec3 = { x: -500, y: -500, z: 1000 };
+const POINT_BBR: Vec3 = { x: 500, y: -500, z: 1000 };
+const POINT_BTL: Vec3 = { x: -500, y: 500, z: 1000 };
+const POINT_BTR: Vec3 = { x: 500, y: 500, z: 1000 };
 
 const DEFAULT_SCENE: SceneConfig = {
   diffuseIntensity: 0.1,
   spheres: [
-    { name: 'Ball', center: { x: -100, y: -100, z: 600 }, radius: 120, color: { r: 0.2, g: 0.7, b: 0.9 } },
-
-    { name: 'Back Bottom Left', center: POINT_BBL, radius: 10, color: { r: 0, g: 0, b: 1 } },
-    { name: 'Back Bottom Right', center: POINT_BBR, radius: 10, color: { r: 0, g: 0, b: 1 } },
-    { name: 'Back Top Left', center: POINT_BTL, radius: 10, color: { r: 0, g: 0, b: 1 } },
-    { name: 'Back Top Right', center: POINT_BTR, radius: 10, color: { r: 0, g: 0, b: 1 } },
-
-    { name: 'Front Bottom Left', center: POINT_FBL, radius: 10, color: { r: 1, g: 0, b: 0 } },
-    { name: 'Front Bottom Right', center: POINT_FBR, radius: 10, color: { r: 1, g: 0, b: 0 } },
-    { name: 'Front Top Left', center: POINT_FTL, radius: 10, color: { r: 1, g: 0, b: 0 } },
-    { name: 'Front Top Right', center: POINT_FTR, radius: 10, color: { r: 1, g: 0, b: 0 } },
+    { name: 'Ball', center: { x: -100, y: -200, z: 700 }, radius: 120, color: { r: 0.2, g: 0.7, b: 1 } },
   ],
   triangles: [
     { name: 'L', pointA: POINT_FTL, pointB: POINT_FBL, pointC: POINT_BBL, color: { r: 1, g: 1, b: 1 } },
@@ -77,7 +67,7 @@ const DEFAULT_SCENE: SceneConfig = {
     { name: 'BACK', pointA: POINT_BTR, pointB: POINT_BTL, pointC: POINT_BBL, color: { r: 1, g: 1, b: 1 } },
   ],
   lights: [
-    { name: 'Main light', center: { x: 0, y: 0, z: 350 }, color: { r: 1, g: 1, b: 1 } },
+    { name: 'Main light', center: { x: 50, y: 300, z: 500 }, color: { r: 1, g: 1, b: 1 } },
   ],
 };
 
