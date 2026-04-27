@@ -1,6 +1,6 @@
+pub mod camera;
 pub mod color;
 pub mod hit;
 pub mod matrices;
 pub mod ray;
 pub mod vector;
-pub mod camera;

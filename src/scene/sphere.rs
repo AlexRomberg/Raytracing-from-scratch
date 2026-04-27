@@ -1,10 +1,13 @@
-use crate::util::{color::Color, hit::Hit, ray::Ray, vector::Vec3};
+use crate::{
+    scene::material::Material,
+    util::{hit::Hit, ray::Ray, vector::Vec3},
+};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Sphere {
     pub center: Vec3,
     pub radius: f32,
-    pub color: Color,
+    pub material: Material,
 }
 
 impl Sphere {
@@ -22,6 +25,6 @@ impl Sphere {
         let lambda = (-b - (root_content).sqrt()) / (2.0 * a);
         let point = ray.origin + ray.direction * lambda;
         let normal = (point - self.center).normalized();
-        Some(Hit::new(point, normal, lambda, self.color, None, None))
+        Some(Hit::new(point, normal, lambda, self.material, None, None))
     }
 }

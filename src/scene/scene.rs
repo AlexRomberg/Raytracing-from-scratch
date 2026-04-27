@@ -15,7 +15,6 @@ pub fn get_pixel(
     triangles: &[Triangle],
     lights: &[Light],
     camera: &Camera,
-    ambient_intensity: f32,
 ) -> Color {
     let mut color = Color::new(0.0, 0.0, 0.0);
     let ray = camera.get_ray(x, y, width, height);
@@ -27,12 +26,15 @@ pub fn get_pixel(
     }
     let hit = nearest_hit.unwrap();
 
-    color = hit.color * ambient_intensity;
+    color = hit.material.ambient_term();
+    let view_dir = (-ray.direction).normalized();
+
     for light in lights {
         let to_light = light.position - hit.point;
-        let correction_shift = to_light.normalized() * 0.0005;
+        let light_dir = to_light.normalized();
+        let correction_shift = light_dir * 0.0005;
         let distance_to_light_2 = to_light.length2();
-        let ray_to_light = ray::Ray::new(hit.point + correction_shift, to_light.normalized());
+        let ray_to_light = ray::Ray::new(hit.point + correction_shift, light_dir);
         let mut in_shadow = false;
 
         for sphere in spheres {
@@ -60,7 +62,9 @@ pub fn get_pixel(
         }
 
         if !in_shadow {
-            color += light.get_color(hit);
+            color += hit
+                .material
+                .shade_blinn_phong(light, hit.normal, light_dir, view_dir);
         }
     }
 

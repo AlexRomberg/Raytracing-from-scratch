@@ -4,6 +4,7 @@ mod util;
 use wasm_bindgen::prelude::*;
 
 use scene::light::Light;
+use scene::material::Material;
 use scene::scene::get_pixel;
 use scene::sphere::Sphere;
 
@@ -12,24 +13,36 @@ use crate::util::camera::Camera;
 use crate::util::color::Color;
 use crate::util::vector::Vec3;
 
-fn parse_spheres(data: &[f32]) -> Vec<Sphere> {
-    data.chunks_exact(7)
+fn parse_spheres(data: &[f32], ambient_intensity: f32) -> Vec<Sphere> {
+    data.chunks_exact(10)
         .map(|c| Sphere {
             center: Vec3::new(c[0], c[1], c[2]),
             radius: c[3],
-            color: Color::new(c[4], c[5], c[6]),
+            material: Material::from_color(
+                Color::new(c[4], c[5], c[6]),
+                ambient_intensity,
+                c[7],
+                c[8],
+                c[9],
+            ),
         })
         .collect()
 }
 
-fn parse_triangles(data: &[f32]) -> Vec<Triangle> {
-    data.chunks_exact(12)
+fn parse_triangles(data: &[f32], ambient_intensity: f32) -> Vec<Triangle> {
+    data.chunks_exact(15)
         .map(|c| {
             Triangle::new(
                 Vec3::new(c[0], c[1], c[2]),
                 Vec3::new(c[3], c[4], c[5]),
                 Vec3::new(c[6], c[7], c[8]),
-                Color::new(c[9], c[10], c[11]),
+                Material::from_color(
+                    Color::new(c[9], c[10], c[11]),
+                    ambient_intensity,
+                    c[12],
+                    c[13],
+                    c[14],
+                ),
             )
         })
         .collect()
@@ -58,8 +71,8 @@ pub fn render_rows(
     light_data: &[f32],
     diffuse_intensity: f32,
 ) -> Vec<u8> {
-    let spheres = parse_spheres(sphere_data);
-    let triangles = parse_triangles(triangle_data);
+    let spheres = parse_spheres(sphere_data, diffuse_intensity);
+    let triangles = parse_triangles(triangle_data, diffuse_intensity);
     let lights = parse_lights(light_data);
     let row_count = end_row - start_row;
     let mut pixels = Vec::with_capacity((row_count * width * 4) as usize);
@@ -96,8 +109,8 @@ pub fn render_rows(
                 &triangles,
                 &lights,
                 &camera,
-                diffuse_intensity,
-            );
+            )
+            .clamp01();
             pixels.push((color.r * 255.0) as u8);
             pixels.push((color.g * 255.0) as u8);
             pixels.push((color.b * 255.0) as u8);

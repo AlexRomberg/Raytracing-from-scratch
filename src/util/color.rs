@@ -11,6 +11,14 @@ impl Color {
     pub fn new(r: f32, g: f32, b: f32) -> Self {
         Self { r, g, b }
     }
+
+    pub fn clamp01(&self) -> Self {
+        Self {
+            r: self.r.clamp(0.0, 1.0),
+            g: self.g.clamp(0.0, 1.0),
+            b: self.b.clamp(0.0, 1.0),
+        }
+    }
 }
 
 impl Mul<Color> for Color {
